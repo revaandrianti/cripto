@@ -1,58 +1,167 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CryptoLab
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+CryptoLab adalah aplikasi web edukasi kriptografi berbasis Laravel. Aplikasi ini menyediakan materi, katalog algoritma, lab untuk menjalankan demonstrasi algoritma, serta riwayat aktivitas per pengguna. Proyek ini ditujukan untuk belajar dan eksperimen—bukan sebagai pustaka atau layanan kriptografi produksi.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Akun pengguna** — registrasi, login, dan logout.
+- **Dashboard** — ringkasan kategori, algoritma aktif, materi, dan aktivitas terbaru pengguna.
+- **Materi kriptografi** — daftar materi yang dipublikasikan, halaman detail, dan filter berdasarkan kategori.
+- **Lab algoritma** — demonstrasi block cipher, stream cipher, hash, MAC, algoritma kunci publik, dan konsep matematika.
+- **Hybrid Trio** — lab yang memperlihatkan proses kaskade A5/1, RC4, dan ChaCha20 beserta paket enkripsi dan jejak komputasi.
+- **Riwayat pribadi** — daftar dan ringkasan operasi berhasil maupun gagal untuk akun yang sedang login.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Halaman materi dapat dibaca tanpa login. Dashboard, lab, riwayat, dan daftar akun hanya tersedia setelah login. Proses login dan registrasi memiliki pembatasan frekuensi permintaan.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Katalog demonstrasi
 
-## Learning Laravel
+Lab mencakup, antara lain:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Block cipher dan mode operasi:** AES-GCM, Twofish, Camellia, 3DES, DES, Blowfish, IDEA, RC5, RC6, CAST-128, SEED, Serpent, Skipjack, serta ECB, CBC, CFB, OFB, dan CTR.
+- **Stream cipher:** RC4, A5/1, A5/2, LFSR, OTP, ChaCha20, Salsa20, Rabbit, Trivium, dan Hybrid Trio.
+- **Hash dan autentikasi:** SHA-256, SHA-512, SHA-3, MD5, SHA-1, HMAC-SHA256, dan CMAC-AES.
+- **Kunci publik dan tanda tangan:** RSA-OAEP, RSA-PSS, RSA signature, ECC/ECIES, DSA, ElGamal, ECDH, dan ECDSA.
+- **Matematika kriptografi:** aritmetika modulo, GCD, Euclid diperluas, bilangan prima, faktorisasi, fungsi Euler, medan hingga, logaritma diskrit, dan kurva eliptik.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Daftar yang dapat dijalankan menyesuaikan dukungan OpenSSL dan ekstensi PHP pada mesin. Katalog di lab adalah implementasi demonstrasi; algoritma lama atau lemah seperti DES, RC4, MD5, dan SHA-1 diberi konteks edukasi dan tidak dianjurkan untuk melindungi data sungguhan.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Teknologi
 
-## Agentic Development
+- PHP **8.3 atau lebih baru**
+- Laravel **13**
+- SQLite sebagai basis data bawaan
+- OpenSSL dan phpseclib untuk sejumlah engine kriptografi
+- Vite, Tailwind CSS, dan npm untuk aset frontend
+- PHPUnit untuk pengujian
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Menjalankan secara lokal (Windows/Laragon)
 
-```bash
-composer require laravel/boost --dev
+Pastikan PHP, Composer, Node.js/npm, dan ekstensi PHP yang dibutuhkan proyek tersedia di terminal.
 
-php artisan boost:install
+```powershell
+composer install
+Copy-Item .env.example .env
+New-Item -ItemType File -Force database/database.sqlite
+php artisan key:generate
+php artisan migrate --seed
+npm install
+npm run build
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Buka alamat lokal yang ditampilkan Artisan, biasanya `http://127.0.0.1:8000`. Untuk mengembangkan frontend sambil menjalankan aplikasi, gunakan `npm run dev` di terminal terpisah.
 
-## Contributing
+Seeder mengisi kategori, katalog algoritma, dan materi awal. Jika perlu mengulang skema dari awal pada basis data lokal, jalankan `php artisan migrate:fresh --seed`; perintah ini menghapus data pada basis data yang dipilih, jadi jangan jalankan pada basis data yang berisi data penting.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Konfigurasi
 
-## Code of Conduct
+Salin `.env.example` ke `.env`, lalu sesuaikan konfigurasi untuk lingkunganmu. Konfigurasi contoh memakai SQLite dengan berkas `database/database.sqlite`. Jangan unggah `.env`, kredensial, atau kunci aplikasi ke repositori.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Pengujian
 
-## Security Vulnerabilities
+Jalankan seluruh pengujian dengan:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```powershell
+php artisan test
+```
 
-## License
+Pengujian menggunakan SQLite dalam memori dan mencakup engine kriptografi, alur lab, autentikasi, materi, serta pencatatan riwayat.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Alur Hybrid Trio
+
+Lab Hybrid Trio mengenkripsi data dengan urutan A5/1 → RC4 → ChaCha20. Dari passphrase dan salt acak, HKDF menurunkan subkunci terpisah untuk setiap cipher dan untuk autentikasi. Setiap operasi enkripsi menghasilkan salt 16 byte dan nonce 12 byte baru. Tag HMAC-SHA256 dihitung atas salt, nonce, dan ciphertext; pada dekripsi, tag diperiksa sebelum plaintext dipulihkan.
+
+Lab juga menyediakan jejak per karakter dalam mode ASCII 7-bit untuk membantu pembelajaran. Jejak visual tersebut merupakan penyederhanaan untuk demonstrasi, bukan representasi keluaran byte penuh untuk semua data. Kaskade ini tetap merupakan eksperimen edukasi dan tidak boleh dianggap sebagai rancangan kriptografi yang telah diaudit untuk penggunaan produksi.
+
+## Struktur data dan ERD
+
+ERD berikut merangkum tabel domain aplikasi. `1` ke `0..N` berarti satu baris induk dapat memiliki nol atau banyak baris anak. Relasi materi ke kategori/algoritma dan riwayat ke algoritma bersifat opsional karena foreign key-nya nullable.
+
+```mermaid
+erDiagram
+    USERS ||--o{ ENCRYPTION_HISTORIES : memiliki
+    CRYPTO_CATEGORIES ||--o{ CRYPTO_ALGORITHMS : mengelompokkan
+    CRYPTO_CATEGORIES o|--o{ MATERIALS : mengelompokkan
+    CRYPTO_ALGORITHMS o|--o{ MATERIALS : menjelaskan
+    CRYPTO_ALGORITHMS o|--o{ ENCRYPTION_HISTORIES : digunakan
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        timestamp email_verified_at
+        string password
+        string remember_token
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    CRYPTO_CATEGORIES {
+        bigint id PK
+        string name
+        string slug UK
+        text description
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    CRYPTO_ALGORITHMS {
+        bigint id PK
+        bigint category_id FK
+        string name
+        string slug UK
+        string type
+        text description
+        string security_status
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    MATERIALS {
+        bigint id PK
+        bigint category_id FK
+        bigint algorithm_id FK
+        string title
+        string slug UK
+        longtext content
+        boolean is_published
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    ENCRYPTION_HISTORIES {
+        bigint id PK
+        bigint user_id FK
+        bigint algorithm_id FK
+        string operation
+        string input_type
+        string message_preview
+        string result_status
+        text error_message
+        timestamp created_at
+        timestamp updated_at
+    }
+```
+
+### Penjelasan relasi dan tabel
+
+| Tabel | Fungsi |
+|---|---|
+| `users` | Akun aplikasi. Email bersifat unik dan password disimpan dalam bentuk hash oleh Laravel. |
+| `crypto_categories` | Pengelompokan materi dan algoritma, seperti Block Cipher, Stream Cipher, Fungsi Utama, dan Dasar Matematika. |
+| `crypto_algorithms` | Katalog algoritma; setiap algoritma wajib memiliki kategori. Jika kategori dihapus, algoritmanya ikut dihapus. |
+| `materials` | Materi berisi judul, slug, konten, dan status publikasi. Kategori dan algoritma terkait boleh kosong; jika induk dihapus, referensinya dibuat `NULL`. |
+| `encryption_histories` | Catatan operasi per pengguna: algoritma (opsional), jenis operasi, tipe input, cuplikan pesan, status, dan pesan kesalahan. Jika akun dihapus, riwayatnya ikut dihapus; jika algoritma dihapus, referensinya dibuat `NULL`. |
+
+Riwayat menyimpan cuplikan input maksimal 60 karakter untuk tampilan aktivitas, bukan paket ciphertext lengkap atau passphrase. Indeks pada `user_id` bersama waktu pembuatan dan status membantu pencarian riwayat pengguna.
+
+Laravel juga membuat tabel pendukung seperti `sessions` dan `password_reset_tokens`; tabel tersebut tidak ditampilkan dalam ERD domain di atas.
+
+## Catatan keamanan
+
+Proyek ini dibuat untuk pembelajaran. Beberapa demonstrasi sengaja menggunakan algoritma usang, parameter contoh, atau pola yang disederhanakan agar konsepnya terlihat. Implementasi lab juga dapat menggunakan nilai deterministik demi reproduksibilitas. Jangan gunakan lab untuk menyimpan rahasia, mengamankan data produksi, atau menggantikan pustaka kriptografi yang ditinjau secara profesional.
+
+## Lisensi
+
+Proyek ini menyediakan kode di bawah lisensi MIT. Lihat berkas lisensi atau metadata dependensi terkait untuk ketentuan komponen pihak ketiga.
