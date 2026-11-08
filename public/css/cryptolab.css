@@ -1,0 +1,940 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ============================================================
+   DESIGN TOKEN — CryptoLab
+   Dua tema resmi: gelap (default) dan terang.
+   Atribut data-bs-theme pada <html> mengganti Bootstrap 5.3
+   sekaligus variabel di bawah, sehingga semua komponen
+   (kartu, form, tabel, dropdown) otomatis konsisten.
+   ============================================================ */
+
+:root,
+[data-bs-theme="dark"] {
+    --bg-main: #080d18;
+    --bg-sidebar: #0d1525;
+    --bg-card: #111d30;
+    --bg-card-hover: #17263d;
+    --bg-input: #0b1423;
+
+    --accent: #39ff9c;
+    --accent-soft: rgba(57, 255, 156, .09);
+    --accent-ring: rgba(57, 255, 156, .1);
+    --accent-hover: #24e88a;
+
+    --blue: #2563eb;
+    --blue-light: #3b82f6;
+
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-faint: #64748b;
+
+    --border: rgba(148, 163, 184, .13);
+    --border-strong: rgba(148, 163, 184, .28);
+
+    --shadow-card: 0 20px 60px rgba(0, 0, 0, .3);
+    --scroll-thumb: rgba(148, 163, 184, .25);
+    --scroll-thumb-hover: rgba(148, 163, 184, .45);
+    color-scheme: dark;
+}
+
+[data-bs-theme="light"] {
+    --bg-main: #f2f5fa;
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #eef3f9;
+    --bg-input: #ffffff;
+
+    /* Hijau aksen digelapkan agar teks memenuhi WCAG AA di atas
+       putih: #047857 pada #ffffff = 5.48:1 (hasil contrast-check). */
+    --accent: #047857;
+    --accent-soft: rgba(4, 120, 87, .09);
+    --accent-ring: rgba(4, 120, 87, .14);
+    --accent-hover: #065f46;
+
+    --blue: #2563eb;
+    --blue-light: #1d4ed8;
+
+    --text-main: #0f172a;
+    --text-muted: #51637a;
+    --text-faint: #7c8da3;
+
+    --border: rgba(15, 23, 42, .1);
+    --border-strong: rgba(15, 23, 42, .22);
+
+    --shadow-card: 0 12px 34px rgba(15, 23, 42, .08);
+    --scroll-thumb: rgba(15, 23, 42, .22);
+    --scroll-thumb-hover: rgba(15, 23, 42, .38);
+    color-scheme: light;
+}
+
+/* ============================================================
+   DASAR
+   ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    /* Skala dasar 15px: menurunkan kesan "zoom 150%" pada seluruh UI
+       (unslop pass type: hierarki dari ukuran dan warna, bukan bobot). */
+    font-size: 15px;
+}
+
+body {
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+    transition: background .25s ease, color .25s ease;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h3, .h5 {
+    font-weight: 600;
+}
+
+h1 {
+    font-size: clamp(1.35rem, 1.2rem + .8vw, 1.7rem);
+}
+
+/* Fokus keyboard selalu terlihat di kedua tema (antislop-human). */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Badge kecil, fungsional, bukan kapsul dekoratif (R-09, R-11). */
+.badge {
+    font-size: .72rem;
+    font-weight: 600;
+    padding: .32em .68em;
+    border-radius: 6px;
+    letter-spacing: .2px;
+}
+
+/* Scrollbar halus dan kecil untuk seluruh aplikasi */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 99px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover);
+}
+
+*::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+.text-muted-custom {
+    color: var(--text-muted) !important;
+}
+
+.text-neon {
+    color: var(--accent) !important;
+}
+
+.btn-neon {
+    background: var(--accent);
+    color: #06120c;
+    border: none;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 11px 18px;
+    transition: .3s;
+}
+
+[data-bs-theme="light"] .btn-neon {
+    color: #ffffff;
+    background: var(--accent);
+}
+
+[data-bs-theme="light"] .btn-neon:hover {
+    background: var(--accent-hover);
+    color: #ffffff;
+}
+
+.btn-neon:hover {
+    background: var(--accent-hover);
+    color: #06120c;
+    transform: translateY(-2px);
+}
+
+[data-bs-theme="light"] .btn-neon:hover {
+    color: #ffffff;
+}
+
+/* ============================================================
+   HALAMAN AUTENTIKASI
+   ============================================================ */
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background:
+        radial-gradient(circle at top left,
+        rgba(37, 99, 235, .18), transparent 35%),
+        var(--bg-main);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: var(--shadow-card);
+}
+
+.auth-logo {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 15px;
+    font-size: 27px;
+    margin: auto auto 15px;
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.form-control,
+.form-select {
+    background: var(--bg-input);
+    border: 1px solid var(--border-strong);
+    color: var(--text-main);
+    padding: 10px 12px;
+    border-radius: 9px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: var(--bg-input);
+    color: var(--text-main);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.form-control::placeholder {
+    color: var(--text-faint);
+}
+
+.form-label {
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-text {
+    color: var(--text-muted);
+}
+
+.form-check-input {
+    background-color: var(--bg-input);
+    border-color: var(--border-strong);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ============================================================
+   CANGKANG APLIKASI (SIDEBAR + KONTEN)
+   ============================================================ */
+
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    padding: 22px 15px;
+    position: fixed;
+    inset: 0 auto 0 0;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 28px;
+    color: var(--text-main);
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.brand-icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.sidebar-label {
+    color: var(--text-faint);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .3px;
+    padding: 16px 12px 6px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    min-height: 44px; /* target sentuh minimum (R-03) */
+    color: var(--text-muted);
+    border-radius: 9px;
+    margin-bottom: 4px;
+    font-size: .86rem;
+    transition: background .2s ease, color .2s ease;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.sidebar-link i {
+    font-size: 17px;
+}
+
+.main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 30px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 15px;
+}
+
+.topbar h4 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 800;
+}
+
+.theme-toggle {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    font-size: 16px;
+    transition: .2s;
+}
+
+.theme-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ============================================================
+   KARTU
+   ============================================================ */
+
+.stat-card,
+.category-card,
+.panel-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 22px;
+    transition: .3s;
+}
+
+.stat-card,
+.category-card {
+    height: 100%;
+}
+
+.panel-card {
+    height: auto;
+}
+
+/* Hover mengubah permukaan saja, tanpa lompatan (MOTION 1, R-19). */
+.stat-card:hover,
+.category-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-strong);
+}
+
+.stat-icon {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    font-size: 20px;
+    background: rgba(37, 99, 235, .16);
+    color: var(--blue-light);
+    margin-bottom: 17px;
+}
+
+[data-bs-theme="light"] .stat-icon {
+    background: rgba(37, 99, 235, .1);
+}
+
+.category-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 13px;
+    font-size: 23px;
+    margin-bottom: 20px;
+}
+
+.card-title-custom {
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.card-description {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.category-arrow {
+    color: var(--accent);
+}
+
+/* Pencarian materi: ukuran wajar, mengikuti lebar konten di sebelahnya. */
+.search-material {
+    max-width: 320px;
+}
+
+/* Kartu materi: kolom fleksibel agar tombol sejajar bawah dan
+   ringkasan memakai tinggi tetap tiga baris (simetri grid, unslop §1). */
+.material-card .card {
+    background: var(--bg-card);
+    border-color: var(--border);
+    color: var(--text-main);
+    transition: background .2s ease, border-color .2s ease;
+    height: 100%;
+}
+
+.material-card .card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-strong);
+}
+
+.material-card .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.material-card .card-title {
+    font-size: .98rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.material-excerpt {
+    color: var(--text-muted);
+    font-size: .84rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.material-card .card-body .btn {
+    margin-top: auto;
+}
+
+.material-card .card {
+    border-radius: 14px;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.material-card:hover .card {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .2);
+}
+
+/* ============================================================
+   STAT CARDS SEMANTIK
+   ============================================================ */
+
+.stat-card.stat-success .stat-icon {
+    background: rgba(34, 197, 94, .16);
+    color: #4ade80;
+}
+
+.stat-card.stat-danger .stat-icon {
+    background: rgba(239, 68, 68, .16);
+    color: #f87171;
+}
+
+[data-bs-theme="light"] .stat-card.stat-success .stat-icon {
+    background: rgba(34, 197, 94, .12);
+    color: #16a34a;
+}
+
+[data-bs-theme="light"] .stat-card.stat-danger .stat-icon {
+    background: rgba(239, 68, 68, .12);
+    color: #dc2626;
+}
+
+/* ============================================================
+   STATUS BADGES & CODE PREVIEWS
+   ============================================================ */
+
+.badge-status-success {
+    background: rgba(34, 197, 94, .14) !important;
+    color: #4ade80 !important;
+    border: 1px solid rgba(34, 197, 94, .3);
+    font-weight: 600;
+}
+
+.badge-status-danger {
+    background: rgba(239, 68, 68, .14) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, .3);
+    font-weight: 600;
+}
+
+[data-bs-theme="light"] .badge-status-success {
+    background: rgba(22, 163, 74, .1) !important;
+    color: #15803d !important;
+    border-color: rgba(22, 163, 74, .25);
+}
+
+[data-bs-theme="light"] .badge-status-danger {
+    background: rgba(220, 38, 38, .1) !important;
+    color: #b91c1c !important;
+    border-color: rgba(220, 38, 38, .25);
+}
+
+.badge-op {
+    background: rgba(59, 130, 246, .12);
+    color: var(--blue-light);
+    border: 1px solid rgba(59, 130, 246, .24);
+    font-weight: 500;
+}
+
+.code-preview-box {
+    background: rgba(0, 0, 0, .25);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-family: var(--bs-font-monospace);
+    font-size: .81rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+}
+
+[data-bs-theme="light"] .code-preview-box {
+    background: #f1f5f9;
+    border-color: rgba(15, 23, 42, .12);
+}
+
+.btn-copy-mini {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0 4px;
+    font-size: .8rem;
+    line-height: 1;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color .15s ease;
+}
+
+.btn-copy-mini:hover {
+    color: var(--accent);
+}
+
+.btn-copy-mini.copied {
+    color: #4ade80 !important;
+}
+
+/* ============================================================
+   PAGINATION DARK & LIGHT
+   ============================================================ */
+
+.pagination {
+    gap: 4px;
+    margin-bottom: 0;
+}
+
+.page-link {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    border-radius: 8px !important;
+    padding: 6px 12px;
+    font-size: .85rem;
+    transition: all .15s ease;
+}
+
+.page-link:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.page-item.active .page-link {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.page-item.disabled .page-link {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text-faint);
+    opacity: .5;
+}
+
+/* ============================================================
+   FILTER CHIPS
+   ============================================================ */
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filter-chip {
+    padding: 6px 14px;
+    font-size: .82rem;
+    font-weight: 500;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    transition: all .2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.filter-chip:hover {
+    border-color: var(--border-strong);
+    color: var(--text-main);
+    background: var(--bg-card-hover);
+}
+
+.filter-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #06120c;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(57, 255, 156, .2);
+}
+
+[data-bs-theme="light"] .filter-chip.active {
+    color: #ffffff;
+    background: var(--accent);
+}
+
+/* ============================================================
+   SEAMLESS SEARCH BOX (ANTI-SLOP)
+   ============================================================ */
+
+.search-box-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-box-wrapper .search-icon {
+    pointer-events: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    z-index: 2;
+    transition: color .2s ease;
+}
+
+.search-input-seamless {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    color: var(--text-main) !important;
+    padding-left: 42px !important;
+    padding-right: 38px !important;
+    height: 44px;
+    font-size: .88rem;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    box-shadow: none !important;
+}
+
+.search-box-wrapper:focus-within .search-icon {
+    color: var(--accent);
+}
+
+.search-input-seamless:focus {
+    background: var(--bg-card-hover) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-ring) !important;
+    outline: none;
+}
+
+.search-input-seamless::placeholder {
+    color: var(--text-muted);
+    opacity: .75;
+}
+
+.btn-clear-search {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    font-size: .75rem;
+    transition: color .15s ease, background .15s ease;
+    z-index: 3;
+}
+
+.btn-clear-search:hover {
+    color: var(--text-main);
+    background: var(--accent-soft);
+}
+
+/* ============================================================
+   TABEL
+   ============================================================ */
+
+.table-dark-custom {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-main);
+    --bs-table-border-color: var(--border);
+}
+
+.table-dark-custom th {
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
+
+/* ============================================================
+   ARTIKEL MATERI (halaman detail)
+   ============================================================ */
+
+.crypto-material {
+    color: var(--text-main);
+    line-height: 1.9;
+    font-size: 16px;
+    max-width: 860px;
+}
+
+.crypto-material h2 {
+    color: var(--text-main);
+    font-size: 1.18rem;
+    font-weight: 600;
+    margin: 30px 0 10px;
+    padding-left: 13px;
+    border-left: 3px solid var(--accent);
+}
+
+.crypto-material h2:first-child {
+    margin-top: 0;
+}
+
+.crypto-material p {
+    margin-bottom: 14px;
+    color: var(--text-main);
+}
+
+.crypto-material ol,
+.crypto-material ul {
+    padding-left: 24px;
+    margin-bottom: 16px;
+}
+
+.crypto-material li {
+    margin-bottom: 8px;
+}
+
+.crypto-material pre {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 14px 0 18px;
+    overflow-x: auto;
+}
+
+.crypto-material pre code {
+    color: var(--accent);
+    font-size: 13.5px;
+    line-height: 1.8;
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+/* Rumus KaTeX: momen kaya utama halaman materi (unslop §moments). */
+.katex {
+    font-size: 1.08em;
+}
+
+.material-formula {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0 16px;
+    overflow-x: auto;
+}
+
+.material-formula .katex-display {
+    margin: 6px 0;
+}
+
+/* ============================================================
+   LAIN-LAIN
+   ============================================================ */
+
+.alert {
+    border-radius: 10px;
+}
+
+.mobile-toggle {
+    display: none;
+}
+
+@media (max-width: 991px) {
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        box-shadow: 0 0 40px rgba(0, 0, 0, .35);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .mobile-toggle {
+        display: inline-flex;
+    }
+}
+
+/* Tablet: grid materi dua kolom agar kartu tidak terlalu lebar. */
+@media (min-width: 640px) and (max-width: 991px) {
+    .material-card {
+        width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .main-content {
+        padding: 16px;
+    }
+
+    .auth-card {
+        padding: 25px 20px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+    }
+
+    .topbar .user-avatar {
+        display: none;
+    }
+
+    /* Ketukan tombol tetap >= 44px di layar sempit (R-03). */
+    .btn {
+        min-height: 44px;
+    }
+}

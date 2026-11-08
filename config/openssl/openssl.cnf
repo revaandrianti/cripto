@@ -1,0 +1,19 @@
+# Config minimal untuk keygen OpenSSL di lingkungan Windows yang
+# tidak menemukan file konfigurasi bawaan (Default: tidak ada).
+[ req ]
+default_bits = 2048
+default_md = sha256
+distinguished_name = req_distinguished_name
+
+[ req_distinguished_name ]
+
+[ v3_ca ]
+
+[ openssl_init ]
+providers = provider_sect
+
+[ provider_sect ]
+default = default_sect
+
+[ default_sect ]
+activate = 1
