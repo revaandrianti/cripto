@@ -1,6 +1,6 @@
 # CryptoLab
 
-CryptoLab adalah aplikasi web edukasi kriptografi berbasis Laravel. Aplikasi ini menyediakan materi, katalog algoritma, lab untuk menjalankan demonstrasi algoritma, serta riwayat aktivitas per pengguna. Proyek ini ditujukan untuk belajar dan eksperimen—bukan sebagai pustaka atau layanan kriptografi produksi.
+CryptoLab adalah website pembelajaran kriptografi yang membantu pengguna mengenal dan memahami berbagai metode pengamanan data. Di dalamnya terdapat materi, daftar algoritma, dan fitur praktik untuk mencoba proses enkripsi maupun dekripsi secara langsung. Aplikasi ini juga dilengkapi dengan riwayat aktivitas sehingga pengguna dapat melihat hasil percobaan sebelumnya.
 
 ## Fitur
 
@@ -160,7 +160,7 @@ Laravel juga membuat tabel pendukung seperti `sessions` dan `password_reset_toke
 
 ## Catatan keamanan
 
-Proyek ini dibuat untuk pembelajaran. Beberapa demonstrasi sengaja menggunakan algoritma usang, parameter contoh, atau pola yang disederhanakan agar konsepnya terlihat. Implementasi lab juga dapat menggunakan nilai deterministik demi reproduksibilitas. Jangan gunakan lab untuk menyimpan rahasia, mengamankan data produksi, atau menggantikan pustaka kriptografi yang ditinjau secara profesional.
+CryptoLab dikembangkan sebagai media pembelajaran untuk memahami dasar-dasar kriptografi melalui simulasi dan eksperimen. Algoritma yang tersedia mungkin menggunakan metode sederhana atau teknik yang sudah tidak direkomendasikan untuk kebutuhan keamanan modern. Beberapa proses juga menggunakan parameter khusus agar hasil simulasi lebih mudah dipahami dan dapat diulang. Oleh karena itu, aplikasi ini hanya ditujukan untuk keperluan edukasi dan tidak disarankan untuk melindungi informasi penting atau data yang bersifat rahasia.
 
 ## Lisensi
 
