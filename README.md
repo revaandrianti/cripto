@@ -1,6 +1,6 @@
 # CryptoLab
 
-CryptoLab adalah website pembelajaran kriptografi yang membantu pengguna mengenal dan memahami berbagai metode pengamanan data. Di dalamnya terdapat materi, daftar algoritma, dan fitur praktik untuk mencoba proses enkripsi maupun dekripsi secara langsung. Aplikasi ini juga dilengkapi dengan riwayat aktivitas sehingga pengguna dapat melihat hasil percobaan sebelumnya.
+CryptoLab merupakan ruang belajar digital yang dirancang untuk mengenalkan dunia kriptografi melalui pembelajaran dan praktik secara langsung. Pengguna dapat mempelajari berbagai algoritma, memahami konsep enkripsi dan dekripsi, serta melakukan simulasi melalui fitur laboratorium. Dengan tampilan yang interaktif dan fitur yang terstruktur, CryptoLab membantu proses belajar kriptografi menjadi lebih praktis, menarik, dan mudah dipahami.
 
 ## Fitur
 
